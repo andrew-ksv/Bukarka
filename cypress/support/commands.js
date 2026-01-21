@@ -3,7 +3,7 @@
 
 Cypress.Commands.add('visitBukarka', () => {
     cy.visit("https://bukarka.vercel.app/");
-    cy.contains('Каталог', { timeout: 30000 }).should('be.visible');
+    cy.contains('Каталог').should('be.visible');
 });
 
 Cypress.Commands.add('clickCatalogButton', () => {
@@ -11,6 +11,8 @@ Cypress.Commands.add('clickCatalogButton', () => {
 });
 
 Cypress.Commands.add('navigateToCategory', (categoryName) => {
+    cy.intercept('GET', '**/categories*').as('getCategories');
     cy.clickCatalogButton();
+    cy.wait('@getCategories', { timeout: 60000 });
     cy.contains('a', categoryName).should('be.visible').click();
 });
